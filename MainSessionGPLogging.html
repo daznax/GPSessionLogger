@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GP Session Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .liveStats {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .saveOrQuitSession {
+            background-color: #fff;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 15px;
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .buttonHolder {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 5px;
+        }
+        h3 {
+            margin-top: 5px;
+        }
+        .buttons {
+            margin: 3px;
+            padding: 5px 15px;
+            background-color: #007BFF;
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .buttons:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <!-- Complicated Scripts are in their own file. Button listening is here -->
+    <script src="MainGPLogging.js"></script> 
+</head>
+<body>
+    <div class="liveStats">
+        <h3>Live Stats</h3>
+            <p id="hands">Hands: 0</p>
+            <p id="VPIP">VPIP: 0%</p>
+            <p id="PFR">PFR: 0%</p>
+            <p id="threeBet">3bet: 0%</p>
+            <button id="updateStats" class="buttons" onclick="updateLiveStats()">Update Stats</button>
+    </div>
+    <div class="saveOrQuitSession">
+        <h3>Save Session</h3>
+            <button id="saveSession" class="buttons" onclick="endSession('1')">Save Session</button>
+            <button id="clearSession" class="buttons" onclick="endSession('0')">Clear Session</button>
+    </div>
+    <div class="buttonHolder">
+        <h3>Folds</h3>
+            <button id="openFold" class="buttons" data-group="incrHand">Open Fold</button>
+            <button id="F2RFI" class="buttons" data-group="incrHand">Fold to RFI</button>
+            <button id="F3B" class="buttons">Fold to 3bet</button>
+        <h3>Raises</h3>
+            <button id="RFI" class="buttons" data-group="incrHand">Raise First In</button>
+            <button id="RVL" class="buttons" data-group="incrHand">Raise Over Limp</button>
+        <h3>Re-Raises</h3>
+            <p><button id="3B" class="buttons" data-group="incrHand">3bet</button><button id="3BS" class="buttons" data-group="incrHand">3bet Squeeze</button></p>
+            <p><button id="Cold4B" class="buttons" data-group="incrHand">Cold 4bet</button><button id="Warm4B" class="buttons">Warm 4bet</button></p>
+            <p><button id="Cold5B" class="buttons" data-group="incrHand">Cold 5bet</button><button id="Warm5B" class="buttons">Warm 5bet</button></p>
+        <h3>Calls</h3>
+            <p>
+                <button id="walk" class="buttons" data-group="incrHand">BB Walk</button>
+                <button id="DBB" class="buttons" data-group="incrHand">Defend BB</button>
+                <button id="DSB" class="buttons" data-group="incrHand">Defend SB</button>
+            </p>
+            <p>
+                <button id="CRFI" class="buttons" data-group="incrHand">Call vs RFI</button>
+                <button id="C3B" class="buttons">Call vs 3bet</button>
+            </p>
+        <h3>Flop Action</h3>
+            <button id="CBET" class="buttons">C-Bet Flop</button>
+        <h3>Showdown</h3>
+            <button id="WTSD" class="buttons">WTSD</button>
+    </div>
+    <script>
+        document.querySelector(".buttonHolder").addEventListener('click', function(event) {
+            if (event.target.tagName !== 'BUTTON') return;
+            let btnId = event.target.id;
+            let btnGroup = event.target.dataset.group;
+            if (isSessionActive() == false) {
+                startSession();
+                btnClick(btnId, btnGroup); 
+            } else {
+                btnClick(btnId, btnGroup);
+            }
+        });
+    </script>
+</body>
+
+</html>
